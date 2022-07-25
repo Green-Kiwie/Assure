@@ -1,9 +1,10 @@
 //true is criteria a, false is criteria b
 //if value is equal, then criterias return false
 
-function FetchData() {
+//partially completed portion of parsing market data from csv files downloaded from the web to arrays
+function FetchData() { //fetch data function
   var array = []
-  fetch("Datas/aapl.csv",
+  fetch("Datas/AAPL.csv",
     { method: "GET" })
     .then(res => res.text())
     .then((csv) => {
@@ -15,16 +16,10 @@ function FetchData() {
       console.log(array);
     });
 }
+//FetchData();
 
-FetchData();
-
-//var AllData = [[1, 155.389999, 156.279999, 153.410004, 154.089996, 154.089996, 66625400], [2, 154.500000, 210.570007, 151.940002, 200.350006, 200.350006, 65086600], [3, 151.119995, 153.720001, 150.369995, 153.039993, 153.039993, 64823400]]
-
-var AllData = array;
-
-
-
-/*function criteria_2(a) { //for eg. if a = 1, then it is criteria 2.1
+//many criterias coincide to form the price pattern
+function criteria_2(a) { //for eg. if a = 1, then it is criteria 2.1
   if (AllData[3 - a][1] > AllData[3 - a][4]) {
     return true;
   }
@@ -59,7 +54,7 @@ function criteria_5(a) {//for eg. if a = 1, then it is criteria 5.1
   else {
     return false;
   }
-} */
+} 
 
 /*console.log(criteria_2(1), ", must be false");
 console.log(criteria_2(2), ", must be false");
@@ -75,4 +70,118 @@ console.log(criteria_3(2, 2, 1), ", must be true");
 console.log(criteria_4(2), ", must be false");
 
 console.log(criteria_5(1), ", must be false");
-console.log(criteria_5(2), ", must be true");*/
+console.log(criteria_5(2), ", must be true"); */
+
+//checking for individual price patterns by checking if a list of criteria has been satisfied
+function PiercingLine() {
+  if (criteria_2(2) == false) {
+    return false;
+  }
+  if (criteria_2(3) == true) {
+    return false;
+  }
+  if (criteria_3(2, 1, 2) == true) {
+    return false;
+  }
+  if (criteria_5(1) == false) {
+    return false;
+  }
+  else {
+    return true;
+  }
+}
+
+function BullishEngulfing() {
+  if (criteria_2(2) == true) {
+    return false;
+  }
+  if (criteria_2(3) == true) {
+    return false;
+  }
+  if (criteria_3(1, 1, 1) == true) {
+    return false;
+  }
+  if (criteria_3(2, 1, 2) == false) {
+    return false;
+  }
+  else {
+    return true;
+  }
+}
+
+function MorningStar() {
+  if (criteria_2(1) == false) {
+    return false;
+  }
+  if (criteria_2(2) == true) {
+    return false;
+  }
+  if (criteria_2(3) == true) {
+    return false;
+  }
+  if (criteria_3(1, 1, 1) == false) {
+    return false;
+  }
+  if (criteria_3(2, 2, 1) == true) {
+    return false;
+  }
+  if (criteria_4(2) == false) {
+    return false;
+  }
+  if (criteria_5(2) == false) {
+    return false;
+  }
+  else {
+    return true;
+  }
+}
+
+function UpsideGap() {
+  if (criteria_2(1) == true) {
+    return false;
+  }
+  if (criteria_2(2) == true) {
+    return false;
+  }
+  if (criteria_2(3) == false) {
+    return false;
+  }
+  if (criteria_3(1, 1, 1) == true) {
+    return false;
+  }
+  if (criteria_3(1, 1, 2) == false) {
+    return false;
+  }
+  if (criteria_3(1, 3, 1) == false) {
+    return false;
+  }
+  if (criteria_3(2, 1, 2) == true) {
+    return false;
+  }
+  if (criteria_3(2, 2, 1) == false) {
+    return false;
+  }
+  else {
+    return true;
+  }
+}
+
+//algorithm to put data sets through multiple checks for the price pattern
+function algorithm(name){
+  console.log(AllData);
+  if(UpsideGap() == true){
+    console.log(name, "has upside gap");
+  }
+  else if(MorningStar() == true){
+    console.log(name, "has morning star");
+  }
+  else if(PiercingLine() == true){
+    console.log(name, "has piercing line");
+  }
+    else if(BullishEngulfing() == true){
+    console.log(name, "has bullish engulfing");
+  }
+  else{
+    console.log(name, "has no pattern");
+  }
+}
